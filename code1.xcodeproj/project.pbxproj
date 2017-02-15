@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D96A81FA1E53DC6200745C18 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D96A81F91E53DC6200745C18 /* main.cpp */; };
+		D96A82031E53DE2B00745C18 /* randmst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D96A81F91E53DC6200745C18 /* randmst.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,8 @@
 
 /* Begin PBXFileReference section */
 		D96A81F61E53DC6200745C18 /* code1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = code1; sourceTree = BUILT_PRODUCTS_DIR; };
-		D96A81F91E53DC6200745C18 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D96A81F91E53DC6200745C18 /* randmst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = randmst.cpp; sourceTree = "<group>"; };
+		D96A82011E53DD0600745C18 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +58,8 @@
 		D96A81F81E53DC6200745C18 /* code1 */ = {
 			isa = PBXGroup;
 			children = (
-				D96A81F91E53DC6200745C18 /* main.cpp */,
+				D96A81F91E53DC6200745C18 /* randmst.cpp */,
+				D96A82011E53DD0600745C18 /* Makefile */,
 			);
 			path = code1;
 			sourceTree = "<group>";
@@ -119,7 +121,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D96A81FA1E53DC6200745C18 /* main.cpp in Sources */,
+				D96A82031E53DE2B00745C18 /* randmst.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +248,7 @@
 				D96A81FF1E53DC6200745C18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
