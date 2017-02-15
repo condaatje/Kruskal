@@ -1,0 +1,133 @@
+// ==================   Basics   ==================
+NULL, nullptr
+
+// Declare and initialize x to 255
+int x = 255;
+
+// Pointers
+int* p;
+int* p = NULL;
+
+// r is a reference to (alias of) int x
+int& r = x;
+
+// array of 10 ints
+int a[10];
+
+// initialized array (same statement)
+int a[]={0,1,2};
+int a[2]={0,1,2};
+
+// notice that you have to specify size here
+int a[2][3]={{1,2,3},{4,5,6}};
+
+string s;
+
+
+
+
+// ==================   I/O   ==================
+// cout is much more comprehensive/safe than printf/scanf.
+// Allows you to simpy put a variable in and have it print, rather than all that %s bs etc.
+// There are several other benefits explained here:
+// http://stackoverflow.com/questions/2872543/printf-vs-cout-in-c
+
+// note: << is not left-shift, it's been overloaded for cout
+std::cout << "String or Var" << "\n"; //or std::endl to flush
+
+char c = std::getchar(); // same as std::getchar(c)
+
+cin >> x; //read in from stdin, any type
+
+// header things that let you not have to always type std::
+using std::cout;
+using std::endl;
+
+// ^This is the less nuclear option, the more reckless way is:
+using namespace std; // Note - grumpy purists will get mad at you for this
+
+
+
+
+
+
+
+// ==================   Functions   ==================
+
+
+// function declaration (aka prototype) goes up top.
+// after a parameter with a default argument, all subsequent parameters must
+// have a default argument supplied in this or a previous declaration
+
+int point(int x = 3, int y = 4);
+point(1,2); // calls point(1,2)
+point(1);   // calls point(1,4)
+point();    // calls point(3,4)
+
+
+// f is a procedure taking no arguments
+void f();
+
+
+// function definition is where you write out the actual logic.
+int f(int x = 0, int y) {
+// ^ can have default values
+return x + y;
+}
+
+// use defaults with NULL
+
+
+// Convention is return 0 if successfull, 1 or higher for errors
+
+
+
+
+
+// ==================   Classes   ==================
+class Box {
+public:
+double length;   // Length of a box
+double breadth;  // Breadth of a box
+double height;   // Height of a box
+double getVolume() {
+return length *  breadth * height;
+}
+private:
+int strength;
+};
+
+// Note - classes can't be put below main or another such function.
+// No prototyping or stuff like that. Should ideally be abstracted to another file w a header.
+
+//TODO destructors & constructors
+
+
+// Note on   "::"   vs   "->"   vs   "."
+// in C++ "::" is the scope resolution operator
+// It is used to distinguish namespaces, and static methods,
+// basically any case you don't have an object
+// Whereas "." is used to access things inside an object
+
+// And with a pointer to an object, access "through" it
+// with "->" to use a method or property of that "pointed-to" object
+
+
+
+
+// ==================   Tuples   ==================
+
+// make some tuples
+std::tuple<int,char> tup (10,'x');
+auto fourtuple = std::make_tuple ("test", 3.1, 14, 'y');
+
+// print item from tuple
+std::cout << std::get<0>(tup)
+
+// (re)assignment
+std::get<2>(fourtuple) = 100;
+
+// unpacking variables
+int myint; char mychar;
+std::tie (std::ignore, std::ignore, myint, mychar) = fourtuple;
+
