@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D9371BA91E563F9300BF51E2 /* clippings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = clippings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D96A81F61E53DC6200745C18 /* code1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = code1; sourceTree = BUILT_PRODUCTS_DIR; };
 		D96A81F91E53DC6200745C18 /* randmst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = randmst.cpp; sourceTree = "<group>"; };
 		D96A82011E53DD0600745C18 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -62,6 +63,7 @@
 				D96A81F91E53DC6200745C18 /* randmst.cpp */,
 				D96A82011E53DD0600745C18 /* Makefile */,
 				D96A82041E54F46700745C18 /* lang overview */,
+				D9371BA91E563F9300BF51E2 /* clippings */,
 			);
 			path = code1;
 			sourceTree = "<group>";
