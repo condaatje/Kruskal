@@ -89,6 +89,8 @@ struct Point4D {
     double l;
 };
 
+void tests();
+
 class Basic_Graph {
     vector<vector<double>> edges; //TODO float? smaller.
     
@@ -216,23 +218,28 @@ public:
 
 
 class Union_Find {
-    vector<Node> sets;
+    vector<Node *> sets;
 
 public:
     Union_Find(int size) {
+        // optimized init.
         sets.resize(size); // TODO this will probably be shattered when I have to start doctoring space.
     }
+    
+    Union_Find() {}
     
     void makeset(int x) {
         // takes in a vertex. creates a set out of it solo.
         
+        Node * n = new Node();
+        n->value = x;
+        n->rank = 0;
+        n->parent = n;
+        // n.parent = make_shared<Node>(n); // TODO research. maybe use a weak pointer.
         
-        Node n; // TODO does this malloc?
-        n.value = x;
-        n.rank = 0;
-        n.parent = &n;
-        // n.parent = make_shared<Node>(n); // TODO research
-        
+        if (sets.size() <= x) {
+            sets.resize(x + 1); // TODO +1 handles 0 index, but watch out for other issues. Best to initialize with a suggested size.
+        }
         sets[x] = n;
     }
     
@@ -242,22 +249,6 @@ public:
         this->link(this->find(x), this->find(y)); // TODO check this.
     }
     
-    Node * find(int x) {
-        // TODO return the set containing element x
-        
-        // if x ̸= p(x) then
-            // p(x) := FIND(p(x))
-            // return( p(x))
-        
-        Node n = sets[x];
-        
-        if (n.parent->value != n.value) {
-            n.parent = find(n.parent->value); // walk the node up the tree (flattens as it finds)
-        }
-        
-        return n.parent;
-    }
-    
     Node * link(Node * a, Node * b) {
         // if rank(x) > rank(y) then x ↔ y
         // if rank(x) = rank(y) then rank(y) := rank(y) + 1
@@ -265,7 +256,8 @@ public:
         // return(y)
         
         
-        // put the smaller rank tree as a child of the bigger rank tree
+        // put the smaller rank tree as a child of the bigger rank tree.
+        // otherwise (equal rank), put second element as parent.
         if (a->rank > b->rank) {
             // swap pointers
             Node * temp_ptr = b;
@@ -273,14 +265,32 @@ public:
             a = temp_ptr;
         }
         if (a->rank == b->rank) {
-            a->rank = b->rank + 1;
+            // update the rank of the new parrent
+            b->rank = b->rank + 1;
         }
         
+        // a is child of b
         a->parent = b;
         return b;
     }
     
-    void clean() {
+    Node * find(int x) {
+        // TODO return the set containing element x
+        
+        // if x ̸= p(x) then
+            // p(x) := FIND(p(x))
+            // return( p(x))
+        
+        Node * n = sets[x];
+        
+        if (n->parent->value != n->value) {
+            n->parent = find(n->parent->value); // walk the node up the tree (flattens as it finds)
+        }
+        
+        return n->parent;
+    }
+    
+    void clean() {// TODO just make a destructor
         // NOTE: check that this is right, but the way this is set up, everything is chill when the vector is wiped.
         
         for(int i = 0; i < sets.size(); i++) {
@@ -291,14 +301,18 @@ public:
             //                     << n->value << nn;;
             //            }
             // cout << "Freeing node: " << sets[i].value << endl;
-            // free(sets[i]);
+            free(sets[i]);
         }
     }
     
     void print() {
         // TODO more functionality.
-        cout << "Union Find string rep: " << sets.size() << endl;
+        cout << "TODO Union Find string rep: " << sets.size() << endl;
     }
+    
+    vector<Node *> raw() {
+        return sets;
+    };
 };
 
 
@@ -316,7 +330,7 @@ double kruskal(Basic_Graph) {
         // If they aren't in the same set, union them together.
     // There's a certain point where we can stop the algorithm as an optimization, check lecture vid.
     
-    
+    // TODO maybe don't add edges to the union find if they are super huge?
     
     
     // Function Kruskal(graph G(V,E))
@@ -339,31 +353,6 @@ double kruskal(Basic_Graph) {
 }
 
 
-void tests() {
-    // TODO hook this up to command-u
-    // TODO write some damn good tests.
-    
-    Basic_Graph g1;
-    g1.initialize_random(8192);
-    assert(abs(g1.average_weight() - 0.5) < 0.01);
-    
-    assert(g1.distance(1,2) >= 0);
-    assert(g1.distance(1,2) <= 1);
-    
-    
-    Union_Find uf(3);
-    uf.makeset(0);
-    uf.makeset(1);
-    uf.makeset(2);
-    uf.makeset(3);
-    uf.clean();
-    uf.print();
-    
-    
-    cout << "Tests Passed!!!" << nn;
-}
-
-
 int main(int argc, const char * argv[]) {
     //vector<int> v = {7, 5, 16, 8};
     //auto testData = std::unique_ptr<unsigned char[]>{ new unsigned char[16000] };
@@ -374,40 +363,66 @@ int main(int argc, const char * argv[]) {
     Hypercube_Graph g4;
     
     //g1.initialize_random(131072); //will certainly fail until I find a better way to save memory.
-    g1.initialize_random(8192);
+    g1.initialize_random(256);
     
     // fast and no n^2 space
-    g2.initialize_random(131072);
-    g3.initialize_random(131072);
-    g4.initialize_random(131072);
+    g2.initialize_random(256);
+    g3.initialize_random(256);
+    g4.initialize_random(256);
+    
     
     cout << "random distance? " << g1.distance(1, 2) << nn;
-    cout << "Average Weight " << g1.average_weight() << nn;
+    cout << "Average Weight " << g1.average_weight() << nn << nn;
     
-    cout << "TODO ALL" << nn;
-    
+    cout << "Testing..." << nn;
     tests();
+    cout << "Tests Passed!!!" << nn;
     
     return 0;
 }
 
 
 
+void tests() {
+    // TODO hook this up to command-u
+    // TODO write some damn good tests.
+    // TODO abstraction pass.
+    
+    
+    
+    // 1D Graph //
+    Basic_Graph g1;
+    g1.initialize_random(256);
+    assert(abs(g1.average_weight() - 0.5) < 0.01);
+    
+    // TODO not comprehensive
+    assert(g1.distance(1,2) >= 0);
+    assert(g1.distance(1,2) <= 1);
+    
+    
+    
+    // Union Find //
+    Union_Find uf(4);
+    
+    uf.makeset(0);
+    uf.makeset(1);
+    uf.makeset(2);
+    uf.makeset(3);
+    uf.makeset(4);
+    uf.makeset(5);
+    uf.makeset(6);
+    
+    uf.onion(1, 0); // set node 0 as the parent of node 1      0
+    uf.onion(2, 0); // set node 0 as the parent of node 2    1   2
 
-//http://www.cs.fsu.edu/~myers/cop3330/notes/dma.html
-//http://en.cppreference.com/w/cpp/container/vector
-//http://en.cppreference.com/w/cpp/memory/unique_ptr
-//http://www.cplusplus.com/forum/beginner/12409/
-//http://www.cplusplus.com/reference/vector/vector/
-//http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution
-//http://en.cppreference.com/w/cpp/numeric/random
-//http://stackoverflow.com/questions/1074474/should-i-use-double-or-float
-//http://www.acodersjourney.com/2016/05/top-10-dumb-mistakes-avoid-c-11-smart-pointers/
-
-
-
-
-
-
-
+    vector<Node *> backend = uf.raw(); // (TODO is this a duplicate or address? think it's somehwere in between because of the dynamic sizing)
+    assert(backend[0]->parent == backend[0]);
+    assert(backend[1]->parent == backend[0]);
+    assert(backend[2]->parent == backend[0]);
+    assert(backend[0]->rank == 1);
+    
+    // uf.print(); nothing should print outside of main() in the long run.
+    
+    uf.clean(); // TODO replace w deinit?
+}
 
