@@ -1,12 +1,17 @@
 
 
-//http://www.cs.fsu.edu/~myers/cop3330/notes/dma.html
-//http://en.cppreference.com/w/cpp/container/vector
-//http://en.cppreference.com/w/cpp/memory/unique_ptr
-//http://www.cplusplus.com/forum/beginner/12409/
-//http://www.cplusplus.com/reference/vector/vector/
-//http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution
-//http://en.cppreference.com/w/cpp/numeric/random
-//http://stackoverflow.com/questions/1074474/should-i-use-double-or-float
-//http://www.acodersjourney.com/2016/05/top-10-dumb-mistakes-avoid-c-11-smart-pointers/
-//http://stackoverflow.com/questions/333443/c-object-instantiation
+// http://www.cs.fsu.edu/~myers/cop3330/notes/dma.html
+// http://en.cppreference.com/w/cpp/container/vector
+// http://en.cppreference.com/w/cpp/memory/unique_ptr
+// http://www.cplusplus.com/forum/beginner/12409/
+// http://www.cplusplus.com/reference/vector/vector/
+// http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution
+// http://en.cppreference.com/w/cpp/numeric/random
+// http://stackoverflow.com/questions/1074474/should-i-use-double-or-float
+// http://www.acodersjourney.com/2016/05/top-10-dumb-mistakes-avoid-c-11-smart-pointers/
+// http://stackoverflow.com/questions/333443/c-object-instantiation
+// https://www.quora.com/How-do-I-make-my-own-header-file-in-C-and-C++
+// http://www.cplusplus.com/forum/articles/10627/
+// https://www.cs.bu.edu/teaching/cpp/writing-makefiles/
+// http://stackoverflow.com/questions/2408038/what-does-wall-in-g-wall-test-cpp-o-test-do
+// http://www.cs.umd.edu/class/fall2002/cmsc214/Tutorial/makefile.html
