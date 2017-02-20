@@ -283,6 +283,7 @@ public:
         
         Node * n = sets[x];
         
+        // TODO protect against bad input
         if (n->parent->value != n->value) {
             n->parent = find(n->parent->value); // walk the node up the tree (flattens as it finds)
         }
@@ -402,7 +403,7 @@ void tests() {
     
     
     // Union Find //
-    Union_Find uf(4);
+    Union_Find uf;
     
     uf.makeset(0);
     uf.makeset(1);
@@ -410,16 +411,30 @@ void tests() {
     uf.makeset(3);
     uf.makeset(4);
     uf.makeset(5);
-    uf.makeset(6);
     
+    //uf.onion(14, 124); // TODO protect against bad input
+    
+    vector<Node *> backend = uf.raw(); // Note - only pull raw once the vector sizing is done.
     uf.onion(1, 0); // set node 0 as the parent of node 1      0
+    assert(backend[0]->rank == 1); //                        ./ \.
     uf.onion(2, 0); // set node 0 as the parent of node 2    1   2
-
-    vector<Node *> backend = uf.raw(); // (TODO is this a duplicate or address? think it's somehwere in between because of the dynamic sizing)
     assert(backend[0]->parent == backend[0]);
     assert(backend[1]->parent == backend[0]);
     assert(backend[2]->parent == backend[0]);
-    assert(backend[0]->rank == 1);
+    
+    uf.onion(4, 3); // set node 3 as parent of 4          3
+    uf.onion(5, 4); // set node 4 as parent of 5           \.
+    assert(backend[5]->parent->parent == backend[3]); //    4 <- 5
+    
+    uf.onion(4, 2); // should link tree root 0 with tree root 3
+    assert(backend[3]->parent == backend[0]);
+    
+    uf.find(4); // find should compress so that only 5 doesn't point to 0.
+    assert(backend[4]->parent == backend[0]);
+    assert(backend[5]->parent != backend[0]); //TODO understand why this points to 3 and confirm that's the behavior we want.
+    
+    uf.find(5); // then it gets flattened.
+    assert(backend[5]->parent == backend[0]);
     
     // uf.print(); nothing should print outside of main() in the long run.
     
