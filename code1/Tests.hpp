@@ -10,7 +10,11 @@
 #define tests_hpp
 
 void test_union_find();
-void test_graph1();
+void test_basic_graph();
+void test_square_graph();
+void test_cube_graph();
+void test_hypercube_graph();
+void test_kruskal();
 
 #endif /* tests_hpp */
 

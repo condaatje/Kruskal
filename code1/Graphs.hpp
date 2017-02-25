@@ -34,40 +34,54 @@ struct Point4D {
     double l;
 };
 
+struct Edge {
+    int v1;
+    int v2;
+    double weight;
+};
 
-class Basic_Graph {
+// Abstract Class
+class Graph {
+public:
+    int num_vertices;
+    virtual void initialize_random(int num_vertices) =0;
+    virtual double weight(int x, int y) =0;
+};
+
+class Basic_Graph: public Graph {
 private:
     vector< vector<double> > edges; //TODO float? smaller.
 public:
     void initialize_random(int num_vertices);
-    double distance(int vertex1, int vertex2);
+    double weight(int x, int y);
     double average_weight();
 };
 
 
-class Square_Graph {
+class Square_Graph: public Graph {
 private:
     vector<Point2D> vertices;
 public:
     void initialize_random(int num_vertices);
+    double weight(int vertex1, int vertex2);
 };
 
 
-
-class Cube_Graph {
+class Cube_Graph: public Graph {
 private:
     vector<Point3D> vertices;
 public:
     void initialize_random(int num_vertices);
+    double weight(int vertex1, int vertex2);
 };
 
-class Hypercube_Graph {
+
+class Hypercube_Graph: public Graph {
     vector<Point4D> vertices;
 public:
     void initialize_random(int num_vertices);
+    double weight(int vertex1, int vertex2);
 };
-
-
 
 #endif /* Graphs_hpp */
 

@@ -11,7 +11,6 @@
 
 #include "Graphs.hpp"
 
-double kruskal(Basic_Graph);
 int main(int argc, const char * argv[]);
 
 #endif /* Main_h */

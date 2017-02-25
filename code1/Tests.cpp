@@ -7,16 +7,33 @@
 //
 
 #include "Tests.hpp"
+#include "Kruskal.hpp"
 #include "Union_Find.hpp"
 #include "Graphs.hpp"
 #include <assert.h>
 #include <vector>
 #include <cmath>
+#include <iostream>
+
 
 using namespace std;
+const char nn = '\n';
+
+
+void test_kruskal() {
+    cout << "Testing Kruskal's..." << nn;
+    Basic_Graph g1;
+    g1.initialize_random(16384);//131072
+    double mst_weight = kruskal(&g1, 0.0000001);
+    
+    cout << mst_weight << nn;;
+    
+    //TODO actually test with example graphs.
+}
 
 void test_union_find() {
-    
+    cout << "Testing Union-Find..." << nn;
+
     // Union Find //
     Union_Find uf;
     
@@ -43,27 +60,31 @@ void test_union_find() {
     assert(backend[3]->parent == backend[0]);
     
     // find(4) should compress so that only 5 doesn't point to 0,
-    Node * n1 = uf.find(4); // and return a pointer to the root of 4's tree (which is 0)
+    // and return a pointer to the root of 4's tree (which is 0)
+    Node * n1 = uf.find(4);
     assert(n1 == backend[0]);
     assert(backend[4]->parent == backend[0]);
-    assert(backend[5]->parent != backend[0]); //TODO understand why this points to 3 and confirm that's acceptable behavior.
+    
+    // TODO understand why this points to 3 and confirm that's acceptable behavior.
+    assert(backend[5]->parent != backend[0]);
+    
     
     uf.find(5); // then it gets flattened.
     assert(backend[5]->parent == backend[0]);
     
-    // TODO protect against bad input? might actually be good to get a hard fail to debug for now.
-    //uf.onion(14, 124);
+    // TODO protect against bad input?
+    // might actually be good to get a hard fail to debug for now.
+    // uf.onion(14, 124);
     
     uf.clean(); // TODO replace w deinit?
 }
 
 
-void test_graph1() {
+void test_basic_graph() {
+    cout << "Testing Basic Graph..." << nn;
+
     // TODO hook this up to command-u
     // TODO write some damn good tests.
-    // TODO abstraction pass.
-    
-    
     
     // 1D Graph //
     Basic_Graph g1;
@@ -71,8 +92,34 @@ void test_graph1() {
     assert(std::abs(g1.average_weight() - 0.5) < 0.01);
     
     // TODO not comprehensive
-    assert(g1.distance(1,2) >= 0);
-    assert(g1.distance(1,2) <= 1);
+    assert(g1.weight(1,2) >= 0);
+    assert(g1.weight(1,2) <= 1);
     
     
 }
+
+void test_square_graph() {
+    cout << "Testing Square Graph..." << nn;
+    cout << "TODO" << nn;
+
+}
+
+void test_cube_graph() {
+    cout << "Testing Cube Graph..." << nn;
+    cout << "TODO" << nn;
+
+}
+
+
+void test_hypercube_graph() {
+    cout << "Testing Hypercube Graph..." << nn;
+    cout << "TODO" << nn;
+
+}
+
+
+
+
+
+
+
