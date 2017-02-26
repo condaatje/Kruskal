@@ -40,6 +40,8 @@ struct Edge {
     double weight;
 };
 
+bool edgeCompare (Edge a, Edge b);
+
 // Abstract Class
 class Graph {
 public:
@@ -49,9 +51,8 @@ public:
 };
 
 class Basic_Graph: public Graph {
-private:
-    vector< vector<double> > edges; //TODO float? smaller.
 public:
+    vector<Edge> edges;
     void initialize_random(int num_vertices);
     double weight(int x, int y);
     double average_weight();

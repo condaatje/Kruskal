@@ -17,6 +17,7 @@
 // Instructors say it's ok if the algo takes 10min+ to run. Just shouldn't take hours.
 
 #include <iostream>
+#include <chrono>
 #include <vector>
 #include "Union_Find.hpp"
 #include "Graphs.hpp"
@@ -25,6 +26,8 @@
 
 const char nn = '\n';
 using namespace std;
+using namespace chrono;
+
 
 void run_tests();
 
@@ -36,10 +39,10 @@ int main(int argc, const char * argv[]) {
     Cube_Graph g3;
     Hypercube_Graph g4;
     
-    g1.initialize_random(256);
-    g2.initialize_random(256);
-    g3.initialize_random(256);
-    g4.initialize_random(256);
+    //g1.initialize_random(256);
+    //g2.initialize_random(256);
+    //g3.initialize_random(256);
+    //g4.initialize_random(256);
     
     
     // For each type of graph, you must choose several values of n to test.
@@ -57,6 +60,62 @@ int main(int argc, const char * argv[]) {
     // determining the constant factors as well as you can.
     // On the other hand, please try to make sure your answer seems reasonable.
     
+    
+    
+    cout << "Calculating Basic..." << nn;
+    auto begin = high_resolution_clock::now();
+    
+    // n = 128; 256; 512; 1024; 2048; 4096; 8192; 16384; 32768; 65536; 131072;
+    g1.initialize_random(131072);
+    double g1_weight = kruskal_basic(&g1, 0.01); // TODO tighter/dynamic
+    cout << "MST weight: " << g1_weight << nn;
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<nanoseconds>(end-begin).count();
+    double nanoconv = 1000000000;
+    cout << (duration / nanoconv) / 60 << " minutes" << nn << nn;
+    // 4 minutes without --Ofast
+    // 1.5 minutes with
+    // TODO free.
+    
+    
+    cout << "Calculating Square..." << nn;
+    begin = high_resolution_clock::now();
+    g2.initialize_random(131072);
+    double g2_weight = kruskal_euclid(&g2, 0.01); // TODO tighter/dynamic
+    cout << "MST weight: " << g2_weight << nn;
+    end = high_resolution_clock::now();
+    duration = duration_cast<nanoseconds>(end-begin).count();
+    cout << (duration / nanoconv) / 60 << " minutes" << nn << nn;
+    // 6 minutes without -Ofast
+    // 0.55 minutes with
+    
+    
+    cout << "Calculating Cube..." << nn;
+    begin = high_resolution_clock::now();
+    g3.initialize_random(131072);
+    double g3_weight = kruskal_euclid(&g3, 0.04); // TODO tighter/dynamic
+    cout << "MST weight: " << g3_weight << nn;
+    end = high_resolution_clock::now();
+    duration = duration_cast<nanoseconds>(end-begin).count();
+    cout << (duration / nanoconv) / 60 << " minutes" << nn << nn;
+    // 0.57 min
+    
+    cout << "Calculating HyperCube..." << nn;
+    begin = high_resolution_clock::now();
+    g4.initialize_random(131072);
+    double g4_weight = kruskal_euclid(&g4, 0.1); // TODO tighter/dynamic
+    cout << "MST weight: " << g4_weight << nn;
+    end = high_resolution_clock::now();
+    duration = duration_cast<nanoseconds>(end-begin).count();
+    cout << (duration / nanoconv) / 60 << " minutes" << nn << nn;
+    // 0.66 min
+    
+    cout << nn << "We made it." << nn;
+
+    
+    // TODO multithreading. Going to be a lot going on.
+    // At least 5 trials per size for each type of graph.
+    // We've got 4 cores so that works pretty nicely.
     
     return 0;
 }

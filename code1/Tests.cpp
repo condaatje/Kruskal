@@ -26,22 +26,22 @@ void test_kruskal() {
     cout << "Testing Kruskal's..." << nn;
     Basic_Graph g1;
     g1.initialize_random(256);
-    double g1_weight = kruskal(&g1, 0.0001);
+    double g1_weight = kruskal_basic(&g1, 0.5);
     cout << g1_weight << nn;
     
     Square_Graph g2;
     g2.initialize_random(256);
-    double g2_weight = kruskal(&g2, 0.0001);
+    double g2_weight = kruskal_euclid(&g2, 0.5);
     cout << g2_weight << nn;
     
     Cube_Graph g3;
     g3.initialize_random(256);
-    double g3_weight = kruskal(&g3, 0.0001);
+    double g3_weight = kruskal_euclid(&g3, 0.5);
     cout << g3_weight << nn;
     
     Hypercube_Graph g4;
     g4.initialize_random(256);
-    double g4_weight = kruskal(&g4, 0.0001);
+    double g4_weight = kruskal_euclid(&g4, 0.5);
     cout << g4_weight << nn;
     
 }
@@ -100,11 +100,10 @@ void test_basic_graph() {
     Basic_Graph g1;
     g1.initialize_random(256);
     double avg = g1.average_weight();
+    
     assert(std::abs(avg - 0.5) < 0.01);
     
-    // TODO not comprehensive
-    assert(g1.weight(1,2) >= 0);
-    assert(g1.weight(1,2) <= 1);
+    // TODO actual tests
 }
 
 void test_square_graph() {

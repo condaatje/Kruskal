@@ -2,7 +2,7 @@
 OBJS = Main.o Graphs.o Union_Find.o Tests.o Kruskal.o
 CC = g++
 DEBUG = -g
-CFLAGS = -Wall -c -std=c++11 $(DEBUG)
+CFLAGS = -Wall -c -std=c++11 -Ofast $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 
 all: randmst

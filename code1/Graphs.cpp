@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <random>
+#include <iostream>
 #include <assert.h> //TODO get this out of here.
 #include "Union_Find.hpp"
 #include "Graphs.hpp"
@@ -19,6 +20,7 @@ random_device rd;
 default_random_engine gen(rd()); //TODO check what the fastest random number generator is in cpp.
 uniform_real_distribution<> dis(0, 1);
 
+bool edgeCompare (Edge a, Edge b) { return (a.weight < b.weight); }
 
 
 /////////////////////////BASIC GRAPH/////////////////////////
@@ -28,14 +30,17 @@ void Basic_Graph::initialize_random(int num_vertices) {
     // Complete graphs on n vertices, where the weight of each edge is a real number chosen uniformly at random on [0, 1].
     // very slow, and much space for 131,072 vertices...
     
-    edges.resize(num_vertices);
+    //edges.resize(num_vertices);
+    
     this->num_vertices = num_vertices;
     
     //resize first?
-    for(int i = 0; i < num_vertices; i++) {
-        // quick resize (TODO figure out how to do this once before each average cycle, not once per intit)
-        edges[i].resize(num_vertices);
-    }
+    //    for(int i = 0; i < num_vertices; i++) {
+    //        // quick resize (TODO figure out how to do this once before each average cycle, not once per intit)
+    //        edges[i].resize(num_vertices);
+    //    }
+    
+    double bound = 1000.0 / (double) num_vertices;
     
     for(int i = 0; i < num_vertices; i++) {
         // set random weights for each edge
@@ -47,26 +52,37 @@ void Basic_Graph::initialize_random(int num_vertices) {
             // Kruskal's. How can we manage dropping edges without messing
             // up indexing etc?
             
-            edges[i][j] = dis(gen);
+            // edges[i][j] = dis(gen);
+            double w = dis(gen);
+            if (w < bound) { // TODO dynamic
+                Edge e;
+                e.v1 = i;
+                e.v2 = j;
+                e.weight = w;
+                this->edges.push_back(e);
+            } else {
+                if (w > 3) { // hypercube should max at 2.something
+                    assert(false); // TODO cleanup.
+                }
+            }
         }
     }
 }
 
 double Basic_Graph::weight(int vertex1, int vertex2) {
-    return edges[vertex1][vertex2];
+    assert(false); // TODO bad.
+    return NULL;
 }
 
 double Basic_Graph::average_weight() {
     double acc = 0.0;
     double divisor = 0.0;
     
-    for(int i = 0; i < edges.size(); i++) {
-        for(int j = i; j < edges.size(); j++) {
-            acc += edges[i][j];
-            divisor += 1;
-            if (acc <= 0 || divisor <= 0) { //check for overflow
-                assert(false);
-            }
+    for(int i = 0; i < this->edges.size(); i++) {
+        acc += this->edges[i].weight;
+        divisor += 1;
+        if (acc <= 0 || divisor <= 0) { //check for overflow
+            assert(false);
         }
     }
     
@@ -127,7 +143,7 @@ double Cube_Graph::weight(int vertex1, int vertex2) {
     double xdist = abs(vertices[vertex1].x - vertices[vertex2].x);
     double ydist = abs(vertices[vertex1].y - vertices[vertex2].y);
     double zdist = abs(vertices[vertex1].z - vertices[vertex2].z);
-
+    
     //TODO fast squares etc. (shifts)
     
     double x2ply2plz2 = (xdist * xdist) + (ydist * ydist) + (zdist * zdist);

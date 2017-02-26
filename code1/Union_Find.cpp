@@ -14,12 +14,6 @@
 using namespace std;
 
 Node * Union_Find::link(Node * a, Node * b) {
-    // if rank(x) > rank(y) then x ↔ y
-    // if rank(x) = rank(y) then rank(y) := rank(y) + 1
-    // p(x) := y
-    // return(y)
-    
-    
     // put the smaller rank tree as a child of the bigger rank tree.
     // otherwise (equal rank), put second element as parent.
     if (a->rank > b->rank) {
@@ -40,7 +34,7 @@ Node * Union_Find::link(Node * a, Node * b) {
 
 Union_Find::Union_Find(int size) {
     // optimized init.
-    sets.resize(size); // TODO this will probably be shattered when I have to start doctoring space.
+    sets.resize(size);
 }
 
 Union_Find::Union_Find() {}
@@ -52,7 +46,6 @@ void Union_Find::makeset(int x) {
     n->value = x;
     n->rank = 0;
     n->parent = n;
-    // n.parent = make_shared<Node>(n); // TODO research. maybe use a weak pointer.
     
     if (sets.size() <= x) {
         sets.resize(x + 1); // TODO +1 handles 0 index, but watch out for other issues. Best to initialize with a suggested size.
@@ -63,39 +56,28 @@ void Union_Find::makeset(int x) {
 // "union" is taken
 void Union_Find::onion(int x, int y) {
     // replace two sets containing x and y with their union.
-    this->link(this->find(x), this->find(y)); // TODO check this.
+    this->link(this->find(x), this->find(y));
 }
 
 Node * Union_Find::find(int x) {
-    // TODO return the set containing element x
-    
-    // if x ̸= p(x) then
-    // p(x) := FIND(p(x))
-    // return( p(x))
-    
     Node * n = sets[x];
     
-    // TODO protect against bad input
     if (n->parent->value != n->value) {
-        n->parent = find(n->parent->value); // walk the node up the tree (flattens as it finds)
+        // walk the node up the tree (flattens as it finds)
+        n->parent = find(n->parent->value);
     }
     
     return n->parent;
 }
 
-void Union_Find::clean() {// TODO just make a destructor
-    // NOTE: check that this is right, but the way this is set up, everything is chill when the vector is wiped.
+void Union_Find::clean() {
+    // Normally I would just make a destructor,
+    // but scoping is strange with iterative deepening.
     
     for(int i = 0; i < sets.size(); i++) {
-        
-        //            for(Node * n = sets[i]; n->parent != n; n = n->parent) {
-        //                // Ideally this doesn't get activated, because we're flat.
-        //                cout << "TODO this shouldn't happen. If it does, need to free these guys: "
-        //                     << n->value << nn;;
-        //            }
-        // cout << "Freeing node: " << sets[i].value << endl;
         free(sets[i]);
     }
+    sets.clear(); // TODO check leaks
 }
 
 vector<Node *> Union_Find::raw() {
