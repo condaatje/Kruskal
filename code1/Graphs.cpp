@@ -20,6 +20,7 @@ default_random_engine gen(rd()); //TODO check what the fastest random number gen
 uniform_real_distribution<> dis(0, 1);
 
 
+
 /////////////////////////BASIC GRAPH/////////////////////////
 
 void Basic_Graph::initialize_random(int num_vertices) {
@@ -38,7 +39,7 @@ void Basic_Graph::initialize_random(int num_vertices) {
     
     for(int i = 0; i < num_vertices; i++) {
         // set random weights for each edge
-        for(int j = 0; j < num_vertices; j++) {
+        for(int j = i; j < num_vertices; j++) {
             // TODO this has to be pruned for 131072. just not a healthy size.
             // A. needs to be n choose 2 not n^2
             // B. lets eliminate large edges once we've figured out a good
@@ -52,31 +53,24 @@ void Basic_Graph::initialize_random(int num_vertices) {
 }
 
 double Basic_Graph::weight(int vertex1, int vertex2) {
-    double w = edges[vertex1][vertex2];
-    return w;
-    // TODO UNDIRECTED!!!!
+    return edges[vertex1][vertex2];
 }
 
 double Basic_Graph::average_weight() {
-    double acc = 0.1;
+    double acc = 0.0;
+    double divisor = 0.0;
+    
     for(int i = 0; i < edges.size(); i++) {
-        for(int j = 0; j < edges.size(); j++) {
-            
-            
-            //TODO check correctness? isn't this going to double count?
+        for(int j = i; j < edges.size(); j++) {
             acc += edges[i][j];
-            if (acc < 0) {
+            divisor += 1;
+            if (acc <= 0 || divisor <= 0) { //check for overflow
                 assert(false);
             }
         }
-        //acc = acc / vertices.size();
     }
     
-    
-    // watch out for overflow
-    acc = acc / edges.size();
-    acc = acc / edges.size();
-    return acc;
+    return acc / divisor;
 }
 
 
@@ -99,9 +93,18 @@ void Square_Graph::initialize_random(int num_vertices) {
 }
 
 double Square_Graph::weight(int vertex1, int vertex2) {
-    return 0; //TODO
+    double xdist = abs(vertices[vertex1].x - vertices[vertex2].x);
+    double ydist = abs(vertices[vertex1].y - vertices[vertex2].y);
+    
+    //TODO fast squares etc. (shifts)
+    
+    double x2ply2 = (xdist * xdist) + (ydist * ydist);
+    
+    double dist = pow(x2ply2, 0.5);
+    
+    // ideally the compiler cleans this all up but we can mess with it in post.
+    return dist;
 }
-
 
 
 /////////////////////////CUBE GRAPH/////////////////////////
@@ -121,7 +124,18 @@ void Cube_Graph::initialize_random(int num_vertices) {
 }
 
 double Cube_Graph::weight(int vertex1, int vertex2) {
-    return 0; //TODO
+    double xdist = abs(vertices[vertex1].x - vertices[vertex2].x);
+    double ydist = abs(vertices[vertex1].y - vertices[vertex2].y);
+    double zdist = abs(vertices[vertex1].z - vertices[vertex2].z);
+
+    //TODO fast squares etc. (shifts)
+    
+    double x2ply2plz2 = (xdist * xdist) + (ydist * ydist) + (zdist * zdist);
+    
+    double dist = pow(x2ply2plz2, 0.5);
+    
+    // ideally the compiler cleans this all up but we can mess with it in post.
+    return dist;
 }
 
 
@@ -148,7 +162,19 @@ void Hypercube_Graph::initialize_random(int num_vertices) {
 }
 
 double Hypercube_Graph::weight(int vertex1, int vertex2) {
-    return 0; //TODO
+    double idist = abs(vertices[vertex1].i - vertices[vertex2].i);
+    double jdist = abs(vertices[vertex1].j - vertices[vertex2].j);
+    double kdist = abs(vertices[vertex1].k - vertices[vertex2].k);
+    double ldist = abs(vertices[vertex1].l - vertices[vertex2].l);
+    
+    //TODO fast squares etc. (shifts)
+    
+    double x2ply2plz2 = (idist * idist) + (jdist * jdist) + (kdist * kdist) + (ldist * ldist);
+    
+    double dist = pow(x2ply2plz2, 0.5);
+    
+    // ideally the compiler cleans this all up but we can mess with it in post.
+    return dist;
 }
 
 

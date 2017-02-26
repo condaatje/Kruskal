@@ -39,7 +39,7 @@ double kruskal(Graph * g, double bound) {
     vector<Edge> edges;
     
     for(int i = 0; i < g->num_vertices; i++) {
-        for(int j = 0; j < g->num_vertices; j++) {
+        for(int j = i; j < g->num_vertices; j++) {
             double w = g->weight(i, j);
             if (w < bound) { // TODO dynamic
                 Edge e;
@@ -48,7 +48,7 @@ double kruskal(Graph * g, double bound) {
                 e.weight = w;
                 edges.push_back(e);
             } else {
-                if (w > 1) {
+                if (w > 3) { // hypercube should max at 2.something
                     assert(false); // TODO cleanup.
                 }
             }
@@ -59,47 +59,34 @@ double kruskal(Graph * g, double bound) {
     sort(edges.begin(), edges.end(), edgeCompare); // TODO test sort.
     
     double total = 0;
+    int mst_count = 0;
     for(int i = 0; i < edges.size(); i++) {
         Edge e = edges[i];
         if (uf.find(e.v1) != uf.find(e.v2)) {
             uf.onion(e.v1, e.v2);
-            total = total + e.weight;
+            total = total + e.weight;// we aren't recording the MST, just its weight
+            mst_count = mst_count + 1;
+            if (mst_count >= g->num_vertices - 1) {//edges is v-1
+                break;
+            }
         }
     }
     
-    vector<Node *> backend = uf.raw();
-    
-    for(int i = 1; i < backend.size(); i++) {
-        if (backend[i]->parent->value != backend[i-1]->parent->value) {
-            // this works to check whether we've got all the vertices.
-            // not sure if it's an elegant check but it'll do.
-            
-            // check if we've been given a bad graph
-            if(bound > 1) {assert(false);}
-            
-            uf.clean();
-
-            // iterative deepening, doubling keeps the algorithm speedy
-            // TODO talk about how this is still poly/fast.
-            // TODO check for tail-recursion. and speed.
-            return kruskal(g, bound * 2);
-            
-        }
+    // vector<Node *> backend = uf.raw();
+    if (mst_count < g->num_vertices - 1) {
+        // this works to check whether we've got all the vertices.
+        
+        // Bad fail. Something wrong with the algo or graph.
+        if(bound > 1) {assert(false);}
+        
+        uf.clean();
+        
+        // iterative deepening, doubling keeps the worst-case speedy
+        // TODO talk about how this is still poly/fast.
+        // TODO check for tail-recursion. and speed.
+        return kruskal(g, bound * 2);
     }
     
-    // Function Kruskal(graph G(V,E))
-    // set X
-    // X = {}
-    // E:= sort E by weight
-    //
-    // for u ∈ V
-    // MAKESET(u) rof
-    //
-    // for (u, v) ∈ E (in increasing order) do
-    // if FIND(u) ̸= FIND(v) do
-    // X = X ∪ {(u, v)}
-    // UNION(u,v)
-    // return(X)
     
     uf.clean();
     return total;

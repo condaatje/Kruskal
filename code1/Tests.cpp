@@ -21,14 +21,29 @@ const char nn = '\n';
 
 
 void test_kruskal() {
+    //TODO actually test with example graphs.
+
     cout << "Testing Kruskal's..." << nn;
     Basic_Graph g1;
-    g1.initialize_random(16384);//131072
-    double mst_weight = kruskal(&g1, 0.0000001);
+    g1.initialize_random(256);
+    double g1_weight = kruskal(&g1, 0.0001);
+    cout << g1_weight << nn;
     
-    cout << mst_weight << nn;;
+    Square_Graph g2;
+    g2.initialize_random(256);
+    double g2_weight = kruskal(&g2, 0.0001);
+    cout << g2_weight << nn;
     
-    //TODO actually test with example graphs.
+    Cube_Graph g3;
+    g3.initialize_random(256);
+    double g3_weight = kruskal(&g3, 0.0001);
+    cout << g3_weight << nn;
+    
+    Hypercube_Graph g4;
+    g4.initialize_random(256);
+    double g4_weight = kruskal(&g4, 0.0001);
+    cout << g4_weight << nn;
+    
 }
 
 void test_union_find() {
@@ -82,23 +97,20 @@ void test_union_find() {
 
 void test_basic_graph() {
     cout << "Testing Basic Graph..." << nn;
-
-    // TODO hook this up to command-u
-    // TODO write some damn good tests.
-    
-    // 1D Graph //
     Basic_Graph g1;
     g1.initialize_random(256);
-    assert(std::abs(g1.average_weight() - 0.5) < 0.01);
+    double avg = g1.average_weight();
+    assert(std::abs(avg - 0.5) < 0.01);
     
     // TODO not comprehensive
     assert(g1.weight(1,2) >= 0);
     assert(g1.weight(1,2) <= 1);
-    
-    
 }
 
 void test_square_graph() {
+    // really need to test this to make sure we're putting out the right
+    // weights for vertices.
+    
     cout << "Testing Square Graph..." << nn;
     cout << "TODO" << nn;
 
