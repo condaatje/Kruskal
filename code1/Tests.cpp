@@ -1,10 +1,3 @@
-//
-//  tests.cpp
-//  code1
-//
-//  Created by Eagle on 2/20/17.
-//  Copyright © 2017 Ondaatje124. All rights reserved.
-//
 
 #include "Tests.hpp"
 #include "Kruskal.hpp"
@@ -15,14 +8,11 @@
 #include <cmath>
 #include <iostream>
 
-
 using namespace std;
 const char nn = '\n';
 
 
 void test_kruskal() {
-    //TODO actually test with example graphs.
-
     cout << "Testing Kruskal's..." << nn;
     
     vector<Edge> egs;
@@ -79,6 +69,7 @@ void test_kruskal() {
     cout << "Kruskal's Passed." << nn;
 }
 
+
 void test_union_find() {
     cout << "Testing Union-Find..." << nn;
 
@@ -120,10 +111,9 @@ void test_union_find() {
     uf.find(5); // then it gets flattened.
     assert(backend[5]->parent == backend[0]);
     
-    // TODO protect against bad input?
-    // might actually be good to get a hard fail to debug for now.
+    // hard fail to debug for now.
     // uf.onion(14, 124);
     
-    uf.clean(); // TODO replace w deinit?
+    uf.clean();
 }
 

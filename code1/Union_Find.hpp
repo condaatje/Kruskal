@@ -1,10 +1,3 @@
-//
-//  Union_Find.hpp
-//  code1
-//
-//  Created by Eagle on 2/20/17.
-//  Copyright © 2017 Ondaatje124. All rights reserved.
-//
 
 #ifndef Union_Find_hpp
 #define Union_Find_hpp
@@ -24,6 +17,7 @@ class Union_Find {
 private:
     vector<Node *> sets; // this makes cleanup and testing much easier.
     Node * link(Node * a, Node * b);
+    
 public:
     Union_Find(int size);
     Union_Find();

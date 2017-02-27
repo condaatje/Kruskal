@@ -1,10 +1,3 @@
-//
-//  Graphs.hpp
-//  code1
-//
-//  Created by Eagle on 2/20/17.
-//  Copyright © 2017 Ondaatje124. All rights reserved.
-//
 
 #ifndef Graphs_hpp
 #define Graphs_hpp
@@ -13,10 +6,6 @@
 #include <vector>
 #include <string>
 
-
-struct Point1D { //TODO necessary?
-    double x;
-};
 
 class Point2D {
 public:
@@ -27,6 +16,7 @@ public:
     double x;
     double y;
 };
+
 
 class Point3D {
 public:
@@ -39,6 +29,7 @@ public:
     double y;
     double z;
 };
+
 
 class Point4D {
 public:
@@ -67,9 +58,11 @@ public:
     double weight;
 };
 
+
 bool edgeCompare (Edge a, Edge b);
 
-// Abstract Class
+
+// Abstract Class (protocol)
 class Graph {
 public:
     string graph_type;
@@ -77,6 +70,7 @@ public:
     virtual void initialize_random(int num_vertices) =0;
     virtual double weight(int x, int y) =0;
 };
+
 
 class Basic_Graph: public Graph {
 public:
@@ -117,9 +111,3 @@ public:
 };
 
 #endif /* Graphs_hpp */
-
-
-
-
-
-

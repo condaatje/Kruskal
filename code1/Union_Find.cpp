@@ -1,13 +1,6 @@
-//
-//  Union_Find.cpp
-//  code1
-//
-//  Created by Eagle on 2/20/17.
-//  Copyright © 2017 Ondaatje124. All rights reserved.
-//
 
 #include "Union_Find.hpp"
-#include <iostream> //free()
+#include <iostream>
 #include <assert.h>
 #include <vector>
 
@@ -48,7 +41,8 @@ void Union_Find::makeset(int x) {
     n->parent = n;
     
     if (sets.size() <= x) {
-        sets.resize(x + 1); // TODO +1 handles 0 index, but watch out for other issues. Best to initialize with a suggested size.
+        sets.resize(x + 1); // +1 handles 0 index, but watch out for other issues.
+        // Best to initialize with a suggested size.
     }
     sets[x] = n;
 }
@@ -77,7 +71,7 @@ void Union_Find::clean() {
     for(int i = 0; i < sets.size(); i++) {
         free(sets[i]);
     }
-    sets.clear(); // TODO check leaks
+    sets.clear();
 }
 
 vector<Node *> Union_Find::raw() {
