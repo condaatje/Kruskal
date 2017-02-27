@@ -29,7 +29,7 @@ double kruskal_basic(Basic_Graph * g, double bound) {
 
     sort(g->edges.begin(), g->edges.end(), edgeCompare);
 
-    double total = 0;
+    double total = 0.0;
     int mst_count = 0;
     for(int i = 0; i < g->edges.size(); i++) {
         Edge e = g->edges[i];
@@ -87,10 +87,7 @@ double kruskal_euclid(Graph * g, double bound) {
         for(int j = i; j < g->num_vertices; j++) {
             double w = g->weight(i, j); //98% of the execution cost.
             if (w < bound) { // TODO dynamic
-                Edge e;
-                e.v1 = i;
-                e.v2 = j;
-                e.weight = w;
+                Edge e(i, j, w);
                 edges.push_back(e);
             } else {
                 if (w > 3) { // hypercube should max at 2.something
@@ -103,7 +100,7 @@ double kruskal_euclid(Graph * g, double bound) {
     
     sort(edges.begin(), edges.end(), edgeCompare); // TODO test sort.
     
-    double total = 0;
+    double total = 0.0;
     int mst_count = 0;
     for(int i = 0; i < edges.size(); i++) {
         Edge e = edges[i];
@@ -117,7 +114,6 @@ double kruskal_euclid(Graph * g, double bound) {
         }
     }
     
-    // vector<Node *> backend = uf.raw();
     if (mst_count < g->num_vertices - 1) {
         // this works to check whether we've got all the vertices.
         
@@ -127,16 +123,14 @@ double kruskal_euclid(Graph * g, double bound) {
         uf.clean();
         
         //TODO shouldn't really be any printing outside of main. Maybe only do if debug is on.
-        cout << "had to reset on a "<< g->graph_type
+        cout << "     Iterative deepening activated: "<< g->graph_type
              << " graph of size " << g->num_vertices
-             << " with bound of size " << bound << nn << endl;
+             << " with bound of " << bound << endl;
         
         // iterative deepening, doubling keeps the worst-case speedy
         // TODO talk about how this is still poly/fast.
-        // TODO check for tail-recursion. and speed.
         return kruskal_euclid(g, bound * 2);
     }
-    
     
     uf.clean();
     return total;

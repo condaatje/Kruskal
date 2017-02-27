@@ -27,10 +27,10 @@
 #include "Kruskal.hpp"
 
 const char nn = '\n';
-using namespace std;
+using namespace std; // somewhat frowned upon, but fine as long as nobody is dumb and collides with std...
 using namespace chrono;
 double nanoconv = 1000000000;
-vector<int> VERTEX_SPEC = {128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072};
+vector<int> VERTEX_SPEC = {128, 256, 512, 1024};//, 2048, 4096, 8192, 16384, 32768, 65536, 131072};
 
 class Result {
 public:
@@ -100,8 +100,8 @@ int main(int argc, const char * argv[]) {
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<nanoseconds>(end-begin).count();
     
-    cout << nn << "We made it." << nn;
-    cout << "Full run: " << (duration / nanoconv) / 60 << "minutes" << nn;
+    cout << nn << "We made it." << nn << nn;
+    cout << "Full run: " << (duration / nanoconv) / 60 << " minutes" << nn;
     return 0;
 }
 
@@ -244,10 +244,6 @@ void print_avg(vector<Result> r) {
 void run_tests() {
     cout << "Testing..." << nn;
     
-    test_basic_graph();
-    test_square_graph();
-    test_cube_graph();
-    test_hypercube_graph();
     test_kruskal();
     test_union_find();
     

@@ -24,26 +24,59 @@ void test_kruskal() {
     //TODO actually test with example graphs.
 
     cout << "Testing Kruskal's..." << nn;
+    
+    vector<Edge> egs;
+    egs.push_back(Edge(0,1, 0.2));
+    egs.push_back(Edge(0,2, 0.7));
+    egs.push_back(Edge(0,3, 0.3));
+    egs.push_back(Edge(1,2, 0.25));
+    egs.push_back(Edge(1,3, 0.5));
+    egs.push_back(Edge(2,3, 0.1));
     Basic_Graph g1;
-    g1.initialize_random(256);
-    double g1_weight = kruskal_basic(&g1, 0.5);
-    cout << g1_weight << nn;
+    g1.initialize_specific(4, egs);
+    assert(kruskal_basic(&g1, 0.5) == 0.1 + 0.2 + 0.25);
+    cout << "Basic OK." << nn;
     
+    vector<Point2D> points2D;
+    points2D.push_back(Point2D(0.25, 0.9));
+    points2D.push_back(Point2D(0.0, 0.5));
+    points2D.push_back(Point2D(0.6, 0.6));
+    points2D.push_back(Point2D(0.9, 0.5));
+    points2D.push_back(Point2D(0.5, 0.1));
     Square_Graph g2;
-    g2.initialize_random(256);
-    double g2_weight = kruskal_euclid(&g2, 0.5);
-    cout << g2_weight << nn;
+    g2.initialize_specific(points2D);
+    assert(abs(g2.weight(0, 1) - 0.47) < 0.01);
+    double mst_w2 = kruskal_euclid(&g2, 0.5); //Iterative deepening needed for <2,4>
+    assert(abs(mst_w2 - 1.76) < 0.01);
+    cout << "Square OK." << nn;
     
+    vector<Point3D> points3D;
+    points3D.push_back(Point3D(0.25, 0.9, 0));
+    points3D.push_back(Point3D(0.0, 0.5, 0));
+    points3D.push_back(Point3D(0.6, 0.6, 0));
+    points3D.push_back(Point3D(0.9, 0.5, 0));
+    points3D.push_back(Point3D(0.5, 0.1, 0));
     Cube_Graph g3;
-    g3.initialize_random(256);
-    double g3_weight = kruskal_euclid(&g3, 0.5);
-    cout << g3_weight << nn;
-    
+    g3.initialize_specific(points3D);
+    assert(abs(g3.weight(0, 1) - 0.47) < 0.01);
+    double mst_w3 = kruskal_euclid(&g3, 0.5);
+    assert(abs(mst_w3 - 1.76) < 0.01);
+    cout << "Cube OK." << nn;
+
+    vector<Point4D> points4D;
+    points4D.push_back(Point4D(0.25, 0.9, 0, 0));
+    points4D.push_back(Point4D(0.0, 0.5, 0, 0));
+    points4D.push_back(Point4D(0.6, 0.6, 0, 0));
+    points4D.push_back(Point4D(0.9, 0.5, 0, 0));
+    points4D.push_back(Point4D(0.5, 0.1, 0, 0));
     Hypercube_Graph g4;
-    g4.initialize_random(256);
-    double g4_weight = kruskal_euclid(&g4, 0.5);
-    cout << g4_weight << nn;
+    g4.initialize_specific(points4D);
+    assert(abs(g4.weight(0, 1) - 0.47) < 0.01);
+    double mst_w4 = kruskal_euclid(&g4, 0.5);
+    assert(abs(mst_w4 - 1.76) < 0.01);
+    cout << "HyperCube OK." << nn;
     
+    cout << "Kruskal's Passed." << nn;
 }
 
 void test_union_find() {
@@ -93,44 +126,4 @@ void test_union_find() {
     
     uf.clean(); // TODO replace w deinit?
 }
-
-
-void test_basic_graph() {
-    cout << "Testing Basic Graph..." << nn;
-    Basic_Graph g1;
-    g1.initialize_random(256);
-    double avg = g1.average_weight();
-    
-    assert(std::abs(avg - 0.5) < 0.01);
-    
-    // TODO actual tests
-}
-
-void test_square_graph() {
-    // really need to test this to make sure we're putting out the right
-    // weights for vertices.
-    
-    cout << "Testing Square Graph..." << nn;
-    cout << "TODO" << nn;
-
-}
-
-void test_cube_graph() {
-    cout << "Testing Cube Graph..." << nn;
-    cout << "TODO" << nn;
-
-}
-
-
-void test_hypercube_graph() {
-    cout << "Testing Hypercube Graph..." << nn;
-    cout << "TODO" << nn;
-
-}
-
-
-
-
-
-
 

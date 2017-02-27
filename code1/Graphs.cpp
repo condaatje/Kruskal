@@ -1,19 +1,11 @@
-//
-//  Graphs.cpp
-//  code1
-//
-//  Created by Eagle on 2/20/17.
-//  Copyright © 2017 Ondaatje124. All rights reserved.
-//
-
 #include <vector>
 #include <random>
 #include <iostream>
-#include <assert.h> //TODO get this out of here.
+#include <assert.h>
 #include "Union_Find.hpp"
 #include "Graphs.hpp"
 
-using namespace std; // somewhat frowned upon, but fine as long as nobody is dumb and collides with std...
+using namespace std;
 
 // set up random generator
 random_device rd;
@@ -25,46 +17,33 @@ bool edgeCompare (Edge a, Edge b) { return (a.weight < b.weight); }
 
 /////////////////////////BASIC GRAPH/////////////////////////
 
+void Basic_Graph::initialize_specific(int num_vertices, vector<Edge> egs) {
+    this->num_vertices = num_vertices;
+    this->edges = egs;
+}
+
 void Basic_Graph::initialize_random(int num_vertices) {
-    // this takes in a number of vertices, and creates a random, complete, undirected graph.
-    // Complete graphs on n vertices, where the weight of each edge is a real number chosen uniformly at random on [0, 1].
-    // very slow, and much space for 131,072 vertices...
-    
-    //edges.resize(num_vertices);
+    // this takes in a number of vertices, and creates a random,
+    // complete, undirected graph.
+    // Complete graphs on n vertices, where the weight of each edge
+    // is a real number chosen uniformly at random on [0, 1].
     
     this->num_vertices = num_vertices;
     this->graph_type = "Basic";
-    
-    //resize first?
-    //    for(int i = 0; i < num_vertices; i++) {
-    //        // quick resize (TODO figure out how to do this once before each average cycle, not once per intit)
-    //        edges[i].resize(num_vertices);
-    //    }
     
     double bound = 1000.0 / (double) num_vertices;
     
     for(int i = 0; i < num_vertices; i++) {
         // set random weights for each edge
         for(int j = i; j < num_vertices; j++) {
-            // TODO this has to be pruned for 131072. just not a healthy size.
-            // A. needs to be n choose 2 not n^2
-            // B. lets eliminate large edges once we've figured out a good
-            // value, but make sure that we're checking for correctness in
-            // Kruskal's. How can we manage dropping edges without messing
-            // up indexing etc?
-            
-            // edges[i][j] = dis(gen);
             double w = dis(gen);
             if (w < bound) { // TODO dynamic
-                Edge e;
-                e.v1 = i;
-                e.v2 = j;
-                e.weight = w;
-                this->edges.push_back(e); // most of the execution cost. still not bad though.
-            } else {
-                if (w > 3) { // hypercube should max at 2.something
-                    assert(false); // TODO cleanup.
-                }
+                Edge e(i, j, w);
+                this->edges.push_back(e);
+                // most of the execution cost. still not bad though.
+            }
+            if (w > 1) {
+                assert(false);
             }
         }
     }
@@ -96,17 +75,22 @@ double Basic_Graph::average_weight() {
 
 /////////////////////////SQUARE GRAPH/////////////////////////
 
+void Square_Graph::initialize_specific(vector<Point2D> points) {
+    this->vertices = points;
+    this->num_vertices = (int) points.size();
+    this->graph_type = "Square";
+}
+
 void Square_Graph::initialize_random(int num_vertices) {
     // Complete graphs on n vertices, where the vertices are points chosen uniformly
     // at random inside the unit square. (That is, the points are (x,y), with x and y each a real number
     // chosen uniformly at random from [0, 1].) The weight of an edge is just the Euclidean distance between its endpoints.
-    vertices.resize(num_vertices);
+    //vertices.resize(num_vertices);
     this->num_vertices = num_vertices;
     this->graph_type = "Square";
     
     for(int i = 0; i < num_vertices; i++) {
-        vertices[i].x = dis(gen);
-        vertices[i].y = dis(gen);
+        this->vertices.push_back(Point2D(dis(gen), dis(gen)));
     }
 }
 
@@ -121,19 +105,24 @@ double Square_Graph::weight(int vertex1, int vertex2) {
 
 
 /////////////////////////CUBE GRAPH/////////////////////////
+
+void Cube_Graph::initialize_specific(vector<Point3D> points) {
+    this->vertices = points;
+    this->num_vertices = (int) points.size();
+    this->graph_type = "Cube";
+}
+
 void Cube_Graph::initialize_random(int num_vertices) {
     // Complete graphs on n vertices, where the vertices are points chosen
     // uniformly at random inside the unit cube (3 dimensions) and hypercube (4 dimensions).
     // As with the unit square case above, the weight of an edge is just the Euclidean distance between its endpoints.
     
-    vertices.resize(num_vertices);
+    //vertices.resize(num_vertices);
     this->num_vertices = num_vertices;
     this->graph_type = "Cube";
     
     for(int i = 0; i < num_vertices; i++) {
-        vertices[i].x = dis(gen);
-        vertices[i].y = dis(gen);
-        vertices[i].z = dis(gen);
+        vertices.push_back(Point3D(dis(gen), dis(gen), dis(gen)));
     }
 }
 
@@ -151,6 +140,12 @@ double Cube_Graph::weight(int vertex1, int vertex2) {
 
 /////////////////////////HYPERCUBE GRAPH/////////////////////////
 
+void Hypercube_Graph::initialize_specific(vector<Point4D> points) {
+    this->vertices = points;
+    this->num_vertices = (int) points.size();
+    this->graph_type = "HyperCube";
+}
+
 void Hypercube_Graph::initialize_random(int num_vertices) {
     // Complete graphs on n vertices, where the vertices are points chosen
     // uniformly at random inside the unit cube
@@ -159,15 +154,12 @@ void Hypercube_Graph::initialize_random(int num_vertices) {
     // As with the unit square case above,
     // the weight of an edge is just the Euclidean distance between its endpoints.
     
-    vertices.resize(num_vertices);
+    //vertices.resize(num_vertices);
     this->num_vertices = num_vertices;
-    this->graph_type = "Hypercube";
+    this->graph_type = "HyperCube";
     
     for(int i = 0; i < num_vertices; i++) {
-        vertices[i].i = dis(gen);
-        vertices[i].j = dis(gen);
-        vertices[i].k = dis(gen);
-        vertices[i].l = dis(gen);
+        vertices.push_back(Point4D(dis(gen), dis(gen), dis(gen), dis(gen)));
     }
 }
 
