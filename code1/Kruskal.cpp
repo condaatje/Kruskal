@@ -31,7 +31,7 @@ double kruskal_euclid(Graph * g, double bound) {
                 edges.push_back(e);
             } else {
                 if (w > 3) { // hypercube should max at 2.something
-                    assert(false); // TODO cleanup.
+                    assert(false);
                 }
             }
         }
@@ -58,7 +58,7 @@ double kruskal_euclid(Graph * g, double bound) {
     if (mst_count < g->num_vertices - 1) {
         uf.clean();
         
-        // TODO shouldn't really be any printing outside of main. Maybe only do if debug is on?
+        // If this activates, doctor k(n)
         cout << "Iterative deepening activated: " << g->graph_type
              << " graph of size " << g->num_vertices
              << " with bound of " << bound << endl;
@@ -66,8 +66,7 @@ double kruskal_euclid(Graph * g, double bound) {
         // Hard fail. Something wrong with the algo or graph.
         if(bound > 1) { assert(false); }
 
-        // iterative deepening, doubling keeps the worst-case speedy
-        // TODO talk about how this is still poly/fast.
+        // iterative deepening, doubling keeps the worst-case in the same order
         return kruskal_euclid(g, bound * 2);
     }
     

@@ -106,7 +106,6 @@ void test_union_find() {
     assert(n1 == backend[0]);
     assert(backend[4]->parent == backend[0]);
     
-    // TODO understand why this points to 3 and confirm that's acceptable behavior.
     assert(backend[5]->parent != backend[0]);
     
     

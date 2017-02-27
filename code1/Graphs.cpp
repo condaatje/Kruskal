@@ -28,13 +28,13 @@ void Basic_Graph::initialize_random(int num_vertices) {
     this->num_vertices = num_vertices;
     this->graph_type = "Basic";
     
-    double bound = 1000.0 / (double) num_vertices; //TODO k(n);
+    double bound = 1000.0 / (double) num_vertices;
     
     for(int i = 0; i < num_vertices; i++) {
         // set random weights for each edge
         for(int j = i; j < num_vertices; j++) {
             double w = dis(gen);
-            if (w < bound) { // TODO dynamic
+            if (w < bound) {
                 Edge e(i, j, w);
                 this->edges.push_back(e);
                 // most of the execution cost. still not bad though.
@@ -47,7 +47,8 @@ void Basic_Graph::initialize_random(int num_vertices) {
 }
 
 double Basic_Graph::weight(int vertex1, int vertex2) {
-    assert(false); // TODO bad.
+    // This shouldn't be activated.
+    assert(false);
 }
 
 double Basic_Graph::average_weight() {

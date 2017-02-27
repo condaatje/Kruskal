@@ -195,7 +195,7 @@ void calculate_square(vector<Result> * results, int trials, vector<int> numpoint
             int n = numpoints[i];
             Square_Graph g;
             g.initialize_random(n);
-            double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
+            double weight = kruskal_euclid(&g, k(n));
             
             auto end = high_resolution_clock::now();
             auto duration = duration_cast<nanoseconds>(end-begin).count();
@@ -218,7 +218,7 @@ void calculate_cube(vector<Result> * results, int trials, vector<int> numpoints)
             int n = numpoints[i];
             Cube_Graph g;
             g.initialize_random(n);
-            double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
+            double weight = kruskal_euclid(&g, k(n));
             
             auto end = high_resolution_clock::now();
             auto duration = duration_cast<nanoseconds>(end-begin).count();
@@ -241,7 +241,7 @@ void calculate_hypercube(vector<Result> * results, int trials, vector<int> numpo
             int n = numpoints[i];
             Hypercube_Graph g;
             g.initialize_random(n);
-            double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
+            double weight = kruskal_euclid(&g, k(n));
             
             auto end = high_resolution_clock::now();
             auto duration = duration_cast<nanoseconds>(end-begin).count();
@@ -290,8 +290,8 @@ void print_avg(vector<Result> r, int numtrials, vector<int> numpoints) {
     
     for(int i = 0; i < numpoints.size(); i++) {
         Result avg(r[0].graph_type, numpoints[i], 0, 0);
-        // TODO make sure not to mix graph types between vectors. (enforce)
-        // Alternatively, fix this so it's generalized.
+        // WARNING make sure not to mix graph types between vectors. (enforce)
+        // Alternatively, fix this so it's generalized. (TODO)
         
         double div = 0.0;
         
@@ -321,13 +321,13 @@ void run_tests() {
 }
 
 
-// Bounding function (TODO think more about this)
+// Bounding function (trial and error)
 double k(int n) {
     return 15000.0 / ((double) n);
 }
 
-// TODO replace with enum?
-// TODO full program fix-up on dimensionality.
+// TODO full program fix-up on ease-of-use with dimensionality.
+// replace with enum?
 int dim_translate(string s) {
     if (s == "Basic") {
         return 0;
