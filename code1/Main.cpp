@@ -27,30 +27,40 @@
 const char nn = '\n';
 using namespace std;
 using namespace chrono;
+double nanoconv = 1000000000;
 
+class Result {
+public:
+    Result(string graph_type, double vertices, double nanoseconds, double weight) {
+        this->graph_type = graph_type;
+        this->vertices = vertices;
+        this->nanoseconds = nanoseconds;
+        this->weight = weight;
+    }
+    string graph_type;
+    double vertices;
+    double nanoseconds;
+    double weight;
+};
 
 void run_tests();
+vector<Result> calculate_basic();
+vector<Result> calculate_square();
+vector<Result> calculate_cube();
+vector<Result> calculate_hypercube();
+void print_result(Result r);
+void print_result_vector(vector<Result> r);
+void print_strings(vector<string> strs);
+double k(int n);
 
 int main(int argc, const char * argv[]) {
     run_tests();
-    
-    Basic_Graph g1;
-    Square_Graph g2;
-    Cube_Graph g3;
-    Hypercube_Graph g4;
-    
-    //g1.initialize_random(256);
-    //g2.initialize_random(256);
-    //g3.initialize_random(256);
-    //g4.initialize_random(256);
-    
     
     // For each type of graph, you must choose several values of n to test.
     // n = 128; 256; 512; 1024; 2048; 4096; 8192; 16384; 32768; 65536; 131072,
     // and larger values, if your program runs fast enough.
     // For each value of n, you must run your code on several randomly chosen
     // instances of the same size n, and compute the average value for your runs.
-    
     
     // Plot your values vs. n, and interpret your results by giving
     // a simple function f(n) that describes your plot.
@@ -60,55 +70,15 @@ int main(int argc, const char * argv[]) {
     // determining the constant factors as well as you can.
     // On the other hand, please try to make sure your answer seems reasonable.
     
+    vector<Result> r1 = calculate_basic();
+    vector<Result> r2 = calculate_square();
+    vector<Result> r3 = calculate_cube();
+    vector<Result> r4 = calculate_hypercube();
     
-    
-    cout << "Calculating Basic..." << nn;
-    auto begin = high_resolution_clock::now();
-    
-    // n = 128; 256; 512; 1024; 2048; 4096; 8192; 16384; 32768; 65536; 131072;
-    g1.initialize_random(131072);
-    double g1_weight = kruskal_basic(&g1, 0.01); // TODO tighter/dynamic
-    cout << "MST weight: " << g1_weight << nn;
-    auto end = high_resolution_clock::now();
-    auto duration = duration_cast<nanoseconds>(end-begin).count();
-    double nanoconv = 1000000000;
-    cout << (duration / nanoconv) / 60 << " minutes" << nn << nn;
-    // 4 minutes without --Ofast
-    // 1.5 minutes with
-    // TODO free.
-    
-    
-    cout << "Calculating Square..." << nn;
-    begin = high_resolution_clock::now();
-    g2.initialize_random(131072);
-    double g2_weight = kruskal_euclid(&g2, 0.01); // TODO tighter/dynamic
-    cout << "MST weight: " << g2_weight << nn;
-    end = high_resolution_clock::now();
-    duration = duration_cast<nanoseconds>(end-begin).count();
-    cout << (duration / nanoconv) / 60 << " minutes" << nn << nn;
-    // 6 minutes without -Ofast
-    // 0.55 minutes with
-    
-    
-    cout << "Calculating Cube..." << nn;
-    begin = high_resolution_clock::now();
-    g3.initialize_random(131072);
-    double g3_weight = kruskal_euclid(&g3, 0.04); // TODO tighter/dynamic
-    cout << "MST weight: " << g3_weight << nn;
-    end = high_resolution_clock::now();
-    duration = duration_cast<nanoseconds>(end-begin).count();
-    cout << (duration / nanoconv) / 60 << " minutes" << nn << nn;
-    // 0.57 min
-    
-    cout << "Calculating HyperCube..." << nn;
-    begin = high_resolution_clock::now();
-    g4.initialize_random(131072);
-    double g4_weight = kruskal_euclid(&g4, 0.1); // TODO tighter/dynamic
-    cout << "MST weight: " << g4_weight << nn;
-    end = high_resolution_clock::now();
-    duration = duration_cast<nanoseconds>(end-begin).count();
-    cout << (duration / nanoconv) / 60 << " minutes" << nn << nn;
-    // 0.66 min
+    print_result_vector(r1);
+    print_result_vector(r2);
+    print_result_vector(r3);
+    print_result_vector(r4);
     
     cout << nn << "We made it." << nn;
 
@@ -120,7 +90,113 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
+vector<Result> calculate_basic() {
+    vector<Result> results;
+    auto begin = high_resolution_clock::now();
+    // n = 128; 256; 512; 1024; 2048; 4096; 8192; 16384; 32768; 65536; 131072;
+    
+    int n = 1024;
+    Basic_Graph g;
+    g.initialize_random(n);
+    double weight = kruskal_basic(&g, k(n)); // TODO tighter/dynamic
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<nanoseconds>(end-begin).count();
+    
+    Result r("Basic", n, duration, weight);
+    
+    results.push_back(r);
+    // 4 minutes without --Ofast
+    // 1.5 minutes with
+    
+    return results;
+}
 
+vector<Result> calculate_square() {
+    vector<Result> results;
+    
+    auto begin = high_resolution_clock::now();
+    int n = 1024;
+    
+    // n = 128; 256; 512; 1024; 2048; 4096; 8192; 16384; 32768; 65536; 131072;
+    Square_Graph g;
+    g.initialize_random(n);
+    double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
+    
+    
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<nanoseconds>(end-begin).count();
+    
+    // 4 minutes without --Ofast
+    // 1.5 minutes with
+    // TODO free.
+    
+    Result r("Square", n, duration, weight);
+    
+    results.push_back(r);
+    return results;
+}
+
+vector<Result> calculate_cube() {
+    vector<Result> results;
+    auto begin = high_resolution_clock::now();
+    
+    // n = 128; 256; 512; 1024; 2048; 4096; 8192; 16384; 32768; 65536; 131072;
+    int n = 1024;
+    Cube_Graph g;
+    g.initialize_random(n);
+    double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
+    
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<nanoseconds>(end-begin).count();
+    
+    // 6 minutes without -Ofast
+    Result r("Cube", n, duration, weight);
+
+    results.push_back(r);
+    return results;
+}
+
+vector<Result> calculate_hypercube() {
+    vector<Result> results;
+    
+    auto begin = high_resolution_clock::now();
+    
+    // n = 128; 256; 512; 1024; 2048; 4096; 8192; 16384; 32768; 65536; 131072;
+    int n = 1024;
+    
+    Hypercube_Graph g;
+    g.initialize_random(n);
+    double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
+    
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<nanoseconds>(end-begin).count();
+    
+    Result r("HyperCube", n, duration, weight);
+    results.push_back(r);
+
+    return results;
+}
+
+void print_strings(vector<string> strs) {
+    for(int i = 0; i < strs.size(); i++) {
+        cout << strs[i] << nn;
+    }
+    cout << nn;
+}
+
+void print_result(Result r) {
+    cout << r.graph_type  << " Graph, "
+         << r.vertices    << " vertices: "
+         << r.weight      << " MST weight, "
+         << r.nanoseconds/nanoconv << " seconds " << nn;
+}
+
+void print_result_vector(vector<Result> r) {
+    for(int i = 0; i < r.size(); i++){
+        print_result(r[i]);
+    }
+    // cout << nn;
+}
 
 void run_tests() {
     cout << "Testing..." << nn;
@@ -131,6 +207,12 @@ void run_tests() {
     test_kruskal();
     test_union_find();
     cout << "Tests Passed!!!" << nn << nn;
+}
+
+
+// Bounding function (TODO think more about this)
+double k(int n) {
+    return 1000.0 / ((double) n);
 }
 
 

@@ -59,7 +59,7 @@ void Basic_Graph::initialize_random(int num_vertices) {
                 e.v1 = i;
                 e.v2 = j;
                 e.weight = w;
-                this->edges.push_back(e);
+                this->edges.push_back(e); // most of the execution cost. still not bad though.
             } else {
                 if (w > 3) { // hypercube should max at 2.something
                     assert(false); // TODO cleanup.

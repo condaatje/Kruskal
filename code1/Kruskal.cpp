@@ -85,7 +85,7 @@ double kruskal_euclid(Graph * g, double bound) {
     
     for(int i = 0; i < g->num_vertices; i++) {
         for(int j = i; j < g->num_vertices; j++) {
-            double w = g->weight(i, j);
+            double w = g->weight(i, j); //98% of the execution cost.
             if (w < bound) { // TODO dynamic
                 Edge e;
                 e.v1 = i;
