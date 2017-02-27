@@ -48,7 +48,6 @@ void Basic_Graph::initialize_random(int num_vertices) {
 
 double Basic_Graph::weight(int vertex1, int vertex2) {
     assert(false); // TODO bad.
-    return NULL;
 }
 
 double Basic_Graph::average_weight() {
@@ -92,6 +91,8 @@ double Square_Graph::weight(int vertex1, int vertex2) {
     double step2 = (xdist * xdist) + (ydist * ydist);
     return pow(step2, 0.5);
 }
+
+
 
 
 ///////////////////////// CUBE GRAPH /////////////////////////

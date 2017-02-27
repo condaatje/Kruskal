@@ -4,7 +4,7 @@
 
 #include "Graphs.hpp"
 
-double kruskal_basic(Basic_Graph * g, double bound);
+double kruskal_basic(Basic_Graph * g);
 double kruskal_euclid(Graph * g, double bound);
 
 #endif /* Kruskal_hpp */

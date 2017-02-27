@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D92AF0EB1E614C9900214A6E /* Kruskal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D92AF0E91E614C9900214A6E /* Kruskal.cpp */; };
-		D9371BAD1E5B7CEB00BF51E2 /* Tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9371BAB1E5B7CEB00BF51E2 /* Tests.cpp */; };
-		D9371BB01E5B7D2B00BF51E2 /* Union_Find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9371BAE1E5B7D2B00BF51E2 /* Union_Find.cpp */; };
-		D9371BB31E5B7ED400BF51E2 /* Graphs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9371BB11E5B7ED400BF51E2 /* Graphs.cpp */; };
-		D96A82031E53DE2B00745C18 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D96A81F91E53DC6200745C18 /* Main.cpp */; };
+		D92AF0EB1E614C9900214A6E /* Kruskal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D92AF0E91E614C9900214A6E /* Kruskal.cpp */; settings = {COMPILER_FLAGS = "-Ofast"; }; };
+		D9371BAD1E5B7CEB00BF51E2 /* Tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9371BAB1E5B7CEB00BF51E2 /* Tests.cpp */; settings = {COMPILER_FLAGS = "-Ofast"; }; };
+		D9371BB01E5B7D2B00BF51E2 /* Union_Find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9371BAE1E5B7D2B00BF51E2 /* Union_Find.cpp */; settings = {COMPILER_FLAGS = "-Ofast"; }; };
+		D9371BB31E5B7ED400BF51E2 /* Graphs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9371BB11E5B7ED400BF51E2 /* Graphs.cpp */; settings = {COMPILER_FLAGS = "-Ofast"; }; };
+		D96A82031E53DE2B00745C18 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D96A81F91E53DC6200745C18 /* Main.cpp */; settings = {COMPILER_FLAGS = "-Ofast"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */

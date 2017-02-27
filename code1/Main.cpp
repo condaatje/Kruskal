@@ -114,7 +114,7 @@ void calculate_basic(vector<Result> * results, int trials) {
             int n = VERTEX_SPEC[i];
             Basic_Graph g;
             g.initialize_random(n);
-            double weight = kruskal_basic(&g, k(n)); // TODO tighter/dynamic
+            double weight = kruskal_basic(&g);
             
             auto end = high_resolution_clock::now();
             auto duration = duration_cast<nanoseconds>(end-begin).count();
