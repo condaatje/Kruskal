@@ -21,49 +21,106 @@
 #include <chrono>
 #include <vector>
 #include <thread>
+#include <assert.h>
 #include "Union_Find.hpp"
 #include "Graphs.hpp"
+#include "Main.hpp"
 #include "Tests.hpp"
 #include "Kruskal.hpp"
+
+bool DBUG = false;
 
 const char nn = '\n';
 using namespace std; // somewhat frowned upon, but fine as long as nobody is dumb and collides with std...
 using namespace chrono;
 double nanoconv = 1000000000;
-vector<int> VERTEX_SPEC = {128, 256, 512, 1024};//, 2048, 4096, 8192, 16384, 32768, 65536, 131072};
+vector<int> VERTEX_SPEC = {128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072};
 
-class Result {
-public:
-    Result(string graph_type, double vertices, double nanoseconds, double weight) {
-        this->graph_type = graph_type;
-        this->vertices = vertices;
-        this->nanoseconds = nanoseconds;
-        this->weight = weight;
-    }
-    string graph_type;
-    double vertices;
-    double nanoseconds;
-    double weight;
-};
+
 
 void run_tests();
 
-void calculate_basic(vector<Result> * r, int trials);
-void calculate_square(vector<Result> * r, int trials);
-void calculate_cube(vector<Result> * r, int trials);
-void calculate_hypercube(vector<Result> * r, int trials);
+void calculate_basic(vector<Result> * r, int trials, vector<int> numpoints);
+void calculate_square(vector<Result> * r, int trials, vector<int> numpoints);
+void calculate_cube(vector<Result> * r, int trials, vector<int> numpoints);
+void calculate_hypercube(vector<Result> * r, int trials, vector<int> numpoints);
 
-void print_result(Result r);
+void print_result(Result r, int numtrials);
 void print_result_vector(vector<Result> r);
-void print_avg(vector<Result> r);
+void print_avg(vector<Result> r, int numtrials, vector<int> numpoints);
 void print_strings(vector<string> strs);
+
+int dim_translate(string s);
+
+void full_blast();
 
 double k(int n);
 
 
 int main(int argc, const char * argv[]) {
-    run_tests();
+    if(argc != 5) {
+        cout << "Usage: ./randmst <flag> <numpoints> <numtrials> <dimension> "
+             << endl;
+        cout << "Flags: " << nn << "     0 - Staff, 1 - Full Blast, 2 - Test"
+             << endl;
+        return 1;
+    }
     
+    int flag = atoi(argv[1]);
+    
+    if (flag == 1) {
+        DBUG = true;
+        full_blast();
+    }
+    else if (flag == 2) {
+        DBUG = true;
+        run_tests();
+    }
+    
+    else if (flag == 0) {
+        DBUG = false;
+        // Staff reqs.
+        
+        // ./randmst 0 numpoints numtrials dimension
+        int numpoints = atoi(argv[2]);
+        int numtrials = atoi(argv[3]);
+        int dimension = atoi(argv[4]);
+        
+        if (dimension == 0) {
+            vector<Result> r;
+            calculate_basic(&r, numtrials, {numpoints});
+            print_avg(r, numtrials, {numpoints});
+        }
+        else if (dimension == 2) {
+            vector<Result> r;
+            calculate_square(&r, numtrials, {numpoints});
+            print_avg(r, numtrials, {numpoints});
+        }
+        else if (dimension == 3) {
+            vector<Result> r;
+            calculate_cube(&r, numtrials, {numpoints});
+            print_avg(r, numtrials, {numpoints});
+        }
+        else if (dimension == 4) {
+            vector<Result> r;
+            calculate_hypercube(&r, numtrials, {numpoints});
+            print_avg(r, numtrials, {numpoints});
+        }
+        else {
+            cout << "Error: Unrecognized dimension" << nn;
+            return 2;
+        }
+    }
+    else {
+        cout << "Error: Unrecognized flag. " << nn;
+        return 3;
+    }
+    
+    return 0;
+}
+
+
+void full_blast() {
     auto begin = high_resolution_clock::now();
     
     // Results buffers.
@@ -74,12 +131,12 @@ int main(int argc, const char * argv[]) {
     
     cout << "Spawning..." << nn;
     
-    thread t1a (calculate_basic, &r1, 3);
-    thread t1b (calculate_basic, &r1, 3); // push_back is threadsafe.
-    thread t2a (calculate_square, &r2, 3);
-    thread t2b (calculate_square, &r2, 3);
-    thread t3 (calculate_cube, &r3, 6);
-    thread t4 (calculate_hypercube, &r4, 6);
+    thread t1a (calculate_basic, &r1, 3, VERTEX_SPEC);
+    thread t1b (calculate_basic, &r1, 3, VERTEX_SPEC); // push_back is threadsafe.
+    thread t2a (calculate_square, &r2, 3, VERTEX_SPEC);
+    thread t2b (calculate_square, &r2, 3, VERTEX_SPEC);
+    thread t3 (calculate_cube, &r3, 6, VERTEX_SPEC);
+    thread t4 (calculate_hypercube, &r4, 6, VERTEX_SPEC);
     
     cout << "Threaded." << nn << nn;
     
@@ -91,27 +148,26 @@ int main(int argc, const char * argv[]) {
     t4.join();
     
     cout << nn << endl;
-
-    print_avg(r1);
-    print_avg(r2);
-    print_avg(r3);
-    print_avg(r4);
+    
+    print_avg(r1, 6, VERTEX_SPEC);
+    print_avg(r2, 6, VERTEX_SPEC);
+    print_avg(r3, 6, VERTEX_SPEC);
+    print_avg(r4, 6, VERTEX_SPEC);
     
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<nanoseconds>(end-begin).count();
     
     cout << nn << "We made it." << nn << nn;
     cout << "Full run: " << (duration / nanoconv) / 60 << " minutes" << nn;
-    return 0;
 }
 
 
-void calculate_basic(vector<Result> * results, int trials) {
-    for(int i = 0; i < VERTEX_SPEC.size(); i++) {
+void calculate_basic(vector<Result> * results, int trials, vector<int> numpoints) {
+    for(int i = 0; i < numpoints.size(); i++) {
         for(int j = 0; j < trials; j++) {
             auto begin = high_resolution_clock::now();
             
-            int n = VERTEX_SPEC[i];
+            int n = numpoints[i];
             Basic_Graph g;
             g.initialize_random(n);
             double weight = kruskal_basic(&g);
@@ -123,19 +179,20 @@ void calculate_basic(vector<Result> * results, int trials) {
             results->push_back(r);
         }
     }
-    
-    cout << "Finished a Basic run, " << trials << " trials. " << nn;
+    if(DBUG) {
+        cout << "Finished a Basic run, " << trials << " trials. " << nn;
+    }
     // 4 minutes without --Ofast
     // 1.5 minutes with
 }
 
-
-void calculate_square(vector<Result> * results, int trials) {
-    for(int i = 0; i < VERTEX_SPEC.size(); i++) {
+// TODO combine these functions?
+void calculate_square(vector<Result> * results, int trials, vector<int> numpoints) {
+    for(int i = 0; i < numpoints.size(); i++) {
         for(int j = 0; j < trials; j++) {
             auto begin = high_resolution_clock::now();
             
-            int n = VERTEX_SPEC[i];
+            int n = numpoints[i];
             Square_Graph g;
             g.initialize_random(n);
             double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
@@ -147,16 +204,18 @@ void calculate_square(vector<Result> * results, int trials) {
             results->push_back(r);
         }
     }
-    cout << "Finished a Square run, " << trials << " trials. " << nn;
+    if(DBUG) {
+        cout << "Finished a Square run, " << trials << " trials. " << nn;
+    }
 }
 
 
-void calculate_cube(vector<Result> * results, int trials) {
-    for(int i = 0; i < VERTEX_SPEC.size(); i++) {
+void calculate_cube(vector<Result> * results, int trials, vector<int> numpoints) {
+    for(int i = 0; i < numpoints.size(); i++) {
         for(int j = 0; j < trials; j++) {
             auto begin = high_resolution_clock::now();
             
-            int n = VERTEX_SPEC[i];
+            int n = numpoints[i];
             Cube_Graph g;
             g.initialize_random(n);
             double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
@@ -168,17 +227,18 @@ void calculate_cube(vector<Result> * results, int trials) {
             results->push_back(r);
         }
     }
-    
-    cout << "Finished a Cube run, " << trials << " trials. " << nn;
+    if(DBUG) {
+        cout << "Finished a Cube run, " << trials << " trials. " << nn;
+    }
 }
 
 
-void calculate_hypercube(vector<Result> * results, int trials) {
-    for(int i = 0; i < VERTEX_SPEC.size(); i++) {
+void calculate_hypercube(vector<Result> * results, int trials, vector<int> numpoints) {
+    for(int i = 0; i < numpoints.size(); i++) {
         for(int j = 0; j < trials; j++) {
             auto begin = high_resolution_clock::now();
             
-            int n = VERTEX_SPEC[i];
+            int n = numpoints[i];
             Hypercube_Graph g;
             g.initialize_random(n);
             double weight = kruskal_euclid(&g, k(n)); // TODO tighter/dynamic
@@ -190,8 +250,9 @@ void calculate_hypercube(vector<Result> * results, int trials) {
             results->push_back(r);
         }
     }
-    
-    cout << "Finished a HyperCube run, " << trials << " trials. " << nn;
+    if(DBUG) {
+        cout << "Finished a HyperCube run, " << trials << " trials. " << nn;
+    }
 }
 
 
@@ -203,41 +264,50 @@ void print_strings(vector<string> strs) {
 }
 
 
-void print_result(Result r) {
-    cout << r.graph_type  << " Graph, "
-    << r.vertices    << " vertices: "
-    << r.weight      << " MST weight, "
-    << r.nanoseconds/nanoconv << " seconds" << nn;
+void print_result(Result r, int numtrials) {
+    if(DBUG == true) {
+        cout << r.graph_type  << " Graph, "
+        << r.vertices    << " vertices: "
+        << r.weight      << " MST weight, "
+        << r.nanoseconds/nanoconv << " seconds" << nn;
+    }
+    else {
+        cout << r.weight << " " << r.vertices << " "
+        << numtrials << " " << dim_translate(r.graph_type) << nn;
+    }
 }
 
 
 void print_result_vector(vector<Result> r) {
     for(int i = 0; i < r.size(); i++){
-        print_result(r[i]);
+        print_result(r[i], -1);
     }
 }
 
-void print_avg(vector<Result> r) {
+void print_avg(vector<Result> r, int numtrials, vector<int> numpoints) {
     // Not efficient but correct.
     // These are small vectors and I don't want to implement a dictionary.
     
-    for(int i = 0; i < VERTEX_SPEC.size(); i++) {
-        Result avg(r[0].graph_type, i, 0, 0);
+    for(int i = 0; i < numpoints.size(); i++) {
+        Result avg(r[0].graph_type, numpoints[i], 0, 0);
         // TODO make sure not to mix graph types between vectors. (enforce)
+        // Alternatively, fix this so it's generalized.
+        
         double div = 0.0;
         
         for(int j = 0; j < r.size(); j++){
-            if(r[j].vertices == VERTEX_SPEC[i]) {
+            if(r[j].vertices == (double) numpoints[i]) {
                 avg.weight += r[j].weight;
                 avg.nanoseconds += r[j].nanoseconds;
                 div += 1;
             }
         }
-        avg.vertices = VERTEX_SPEC[i];
+        
+        avg.vertices = numpoints[i];
         avg.nanoseconds = avg.nanoseconds / div;
         avg.weight = avg.weight / div;
         
-        print_result(avg);
+        print_result(avg, numtrials);
     }
 }
 
@@ -256,8 +326,23 @@ double k(int n) {
     return 15000.0 / ((double) n);
 }
 
-
-
+// TODO replace with enum?
+// TODO full program fix-up on dimensionality.
+int dim_translate(string s) {
+    if (s == "Basic") {
+        return 0;
+    }
+    else if (s == "Square") {
+        return 2;
+    }
+    else if (s == "Cube") {
+        return 3;
+    }
+    else if (s == "HyperCube") {
+        return 4;
+    }
+    return -1;
+}
 
 
 
