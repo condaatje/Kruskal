@@ -11,6 +11,8 @@
 
 #include "Union_Find.hpp"
 #include <vector>
+#include <string>
+
 
 struct Point1D { //TODO necessary?
     double x;
@@ -45,6 +47,7 @@ bool edgeCompare (Edge a, Edge b);
 // Abstract Class
 class Graph {
 public:
+    string graph_type;
     int num_vertices;
     virtual void initialize_random(int num_vertices) =0;
     virtual double weight(int x, int y) =0;

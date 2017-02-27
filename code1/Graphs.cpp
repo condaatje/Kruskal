@@ -33,6 +33,7 @@ void Basic_Graph::initialize_random(int num_vertices) {
     //edges.resize(num_vertices);
     
     this->num_vertices = num_vertices;
+    this->graph_type = "Basic";
     
     //resize first?
     //    for(int i = 0; i < num_vertices; i++) {
@@ -101,6 +102,7 @@ void Square_Graph::initialize_random(int num_vertices) {
     // chosen uniformly at random from [0, 1].) The weight of an edge is just the Euclidean distance between its endpoints.
     vertices.resize(num_vertices);
     this->num_vertices = num_vertices;
+    this->graph_type = "Square";
     
     for(int i = 0; i < num_vertices; i++) {
         vertices[i].x = dis(gen);
@@ -111,15 +113,10 @@ void Square_Graph::initialize_random(int num_vertices) {
 double Square_Graph::weight(int vertex1, int vertex2) {
     double xdist = abs(vertices[vertex1].x - vertices[vertex2].x);
     double ydist = abs(vertices[vertex1].y - vertices[vertex2].y);
-    
-    //TODO fast squares etc. (shifts)
-    
-    double x2ply2 = (xdist * xdist) + (ydist * ydist);
-    
-    double dist = pow(x2ply2, 0.5);
+    double step2 = (xdist * xdist) + (ydist * ydist);
     
     // ideally the compiler cleans this all up but we can mess with it in post.
-    return dist;
+    return pow(step2, 0.5);
 }
 
 
@@ -131,6 +128,7 @@ void Cube_Graph::initialize_random(int num_vertices) {
     
     vertices.resize(num_vertices);
     this->num_vertices = num_vertices;
+    this->graph_type = "Cube";
     
     for(int i = 0; i < num_vertices; i++) {
         vertices[i].x = dis(gen);
@@ -144,14 +142,9 @@ double Cube_Graph::weight(int vertex1, int vertex2) {
     double ydist = abs(vertices[vertex1].y - vertices[vertex2].y);
     double zdist = abs(vertices[vertex1].z - vertices[vertex2].z);
     
-    //TODO fast squares etc. (shifts)
+    double step2 = (xdist * xdist) + (ydist * ydist) + (zdist * zdist);
     
-    double x2ply2plz2 = (xdist * xdist) + (ydist * ydist) + (zdist * zdist);
-    
-    double dist = pow(x2ply2plz2, 0.5);
-    
-    // ideally the compiler cleans this all up but we can mess with it in post.
-    return dist;
+    return pow(step2, 0.5);
 }
 
 
@@ -168,6 +161,7 @@ void Hypercube_Graph::initialize_random(int num_vertices) {
     
     vertices.resize(num_vertices);
     this->num_vertices = num_vertices;
+    this->graph_type = "Hypercube";
     
     for(int i = 0; i < num_vertices; i++) {
         vertices[i].i = dis(gen);
@@ -185,12 +179,10 @@ double Hypercube_Graph::weight(int vertex1, int vertex2) {
     
     //TODO fast squares etc. (shifts)
     
-    double x2ply2plz2 = (idist * idist) + (jdist * jdist) + (kdist * kdist) + (ldist * ldist);
+    double step2 = (idist * idist) + (jdist * jdist)
+                 + (kdist * kdist) + (ldist * ldist);
     
-    double dist = pow(x2ply2plz2, 0.5);
-    
-    // ideally the compiler cleans this all up but we can mess with it in post.
-    return dist;
+    return  pow(step2, 0.5);
 }
 
 

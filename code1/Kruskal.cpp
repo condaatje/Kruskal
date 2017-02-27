@@ -127,7 +127,8 @@ double kruskal_euclid(Graph * g, double bound) {
         uf.clean();
         
         //TODO shouldn't really be any printing outside of main. Maybe only do if debug is on.
-        cout << "had to reset on a graph of size " << g->num_vertices
+        cout << "had to reset on a "<< g->graph_type
+             << " graph of size " << g->num_vertices
              << " with bound of size " << bound << nn << endl;
         
         // iterative deepening, doubling keeps the worst-case speedy
