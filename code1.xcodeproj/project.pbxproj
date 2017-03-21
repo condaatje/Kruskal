@@ -27,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D9269C3C1E80BE61002F9D65 /* report.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = report.pdf; sourceTree = "<group>"; };
+		D9269C3D1E80BE61002F9D65 /* spec.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = spec.pdf; sourceTree = "<group>"; };
 		D92AF0E91E614C9900214A6E /* Kruskal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Kruskal.cpp; sourceTree = "<group>"; };
 		D92AF0EA1E614C9900214A6E /* Kruskal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Kruskal.hpp; sourceTree = "<group>"; };
 		D9371BA91E563F9300BF51E2 /* clippings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = clippings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -88,6 +90,8 @@
 				D96A82041E54F46700745C18 /* lang overview */,
 				D9371BA91E563F9300BF51E2 /* clippings */,
 				D9371BAA1E5A5DD500BF51E2 /* sources */,
+				D9269C3C1E80BE61002F9D65 /* report.pdf */,
+				D9269C3D1E80BE61002F9D65 /* spec.pdf */,
 			);
 			path = code1;
 			sourceTree = "<group>";
