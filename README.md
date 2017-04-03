@@ -2,7 +2,7 @@
 Multithreaded, optimized C++ program to find the average MST weight in various implementations of a complete, undirected graph.
 Uses Kruskal's algorithm, the Union-Find data structure, iterative deepening, multithreading, and aggressive optimizations.
 
-Implemented Harvard's CS 124 course. Please do not use this code if you are currently taking the course.
+Implemented for Harvard's CS 124. Please do not use this code if you are currently taking the course.
 
 Many students' algorithms would take up to 20 minutes and tens of Gigabytes to run the largest trial.
 I was able to do so in approximately 38 seconds using only 118MB of memory.
@@ -17,7 +17,7 @@ I decided to use Kruskal’s algorithm for this problem for a number of reasons.
 <br/>
 
 #### Growth Rates:
-At first I was a bit surprised by the growth rate of the Basic graph [redacted]. However after thinking it through, it makes sense. This is a complete graph so the more vertices you add, the more likely it becomes that you will get a connection weight close to 0 for each new vertex. Otherwise, I think the average weights weren’t super surprising. It is also nice to see the pattern emerging, since it gives a more intuitive understanding of the relationship between dimensionality and average MST weight.
+At first I was a bit surprised by the growth rate of the Basic graph, [redacted]. However after thinking it through, it makes sense. This is a complete graph so the more vertices you add, the more likely it becomes that you will get a connection weight close to 0 for each new vertex. Otherwise, I think the average weights weren’t super surprising. It is also nice to see the pattern emerging, since it gives a more intuitive understanding of the relationship between dimensionality and average MST weight.
 <br/>
 
 #### Runtime:
