@@ -131,19 +131,15 @@ void full_blast() {
     
     cout << "Spawning..." << nn;
     
-    thread t1a (calculate_basic, &r1, 3, VERTEX_SPEC);
-    thread t1b (calculate_basic, &r1, 3, VERTEX_SPEC); // push_back is threadsafe.
-    thread t2a (calculate_square, &r2, 3, VERTEX_SPEC);
-    thread t2b (calculate_square, &r2, 3, VERTEX_SPEC);
+    thread t1 (calculate_basic, &r1, 6, VERTEX_SPEC);
+    thread t2 (calculate_square, &r2, 6, VERTEX_SPEC);
     thread t3 (calculate_cube, &r3, 6, VERTEX_SPEC);
     thread t4 (calculate_hypercube, &r4, 6, VERTEX_SPEC);
     
     cout << "Threaded." << nn << nn;
     
-    t1a.join();
-    t1b.join();
-    t2a.join();
-    t2b.join();
+    t1.join();
+    t2.join();
     t3.join();
     t4.join();
     
